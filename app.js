@@ -1,87 +1,66 @@
-/* ─── Tab switching ─────────────────────────────────────── */
-function toggleTab(tabId) {
-  // activate correct tab panel
-  document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
-  document.getElementById(tabId).classList.add("active");
-
-  // activate correct button
-  document.querySelectorAll(".tabs button").forEach(btn => btn.classList.remove("active"));
-  const btnId = tabId === "salaryTab" ? "salaryTabBtn" : "payslipTabBtn";
-  document.getElementById(btnId).classList.add("active");
+function showTab(tabId) {
+  document.getElementById('salary').style.display = 'none';
+  document.getElementById('payslip').style.display = 'none';
+  document.getElementById(tabId).style.display = 'block';
 }
 
-/* ─── Core salary math ───────────────────────────────────── */
-function calculateFinalSalary(salary, lop, bonus) {
-  const perDay   = salary / 30;
-  const deduction = lop   * perDay;
-  const bonusAmt  = bonus * perDay;
-  const final     = salary - deduction + bonusAmt;
-  return { deduction, bonusAmt, final };
-}
-
-/* ─── Final Salary Calculator (Tab 1) ───────────────────── */
 function calculateSalary() {
-  const salary = parseFloat(document.getElementById("totalSalary").value);
-  const lop    = parseInt(document.getElementById("lopDays").value);
-  const bonus  = parseInt(document.getElementById("bonusDays").value);
+  const total = parseFloat(document.getElementById("totalSalary").value);
+  const lop = parseInt(document.getElementById("lopDays").value) ;
+  const bonus = parseInt(document.getElementById("bonusDays").value);
 
-  if (isNaN(salary) || isNaN(lop) || isNaN(bonus) || salary <= 0 || lop < 0 || bonus < 0) {
-    document.getElementById("result").textContent = "Please enter valid positive numbers.";
+  if (isNaN(total) || isNaN(lop) || isNaN(bonus)) {
+    document.getElementById("salaryResult").innerText = "Enter valid numbers.";
     return;
   }
 
-  const { final } = calculateFinalSalary(salary, lop, bonus);
-  document.getElementById("result").innerHTML = `<strong>Final Salary:</strong> ₹${final.toFixed(2)}`;
+  const perDay = total / 30;
+  const deduction = lop * perDay;
+  const bonusAmount = bonus * perDay;
+  const final = total - deduction + bonusAmount;
+
+  document.getElementById("salaryResult").innerHTML = `
+    Total: ₹ ${total.toFixed(2)}<br>
+    LOP: ${lop} days<br>
+    Bonus: ${bonus} days<br>
+    Deduction: ₹ ${deduction.toFixed(2)}<br>
+    Bonus Amount: ₹ ${bonusAmount.toFixed(2)}<br>
+    <strong>Final Salary: ₹ ${final.toFixed(2)}</strong>
+  `;
 }
 
-/* ─── Payslip Generator (Tab 2) ─────────────────────────── */
 function generatePayslip() {
-  const name  = document.getElementById("empName").value.trim();
-  const id    = document.getElementById("empId").value.trim();
-  const bank  = document.getElementById("bankName").value.trim();
-  const acc   = document.getElementById("accNo").value.trim();
-  const sal   = parseFloat(document.getElementById("totalSalary2").value);
-  const lop   = parseInt(document.getElementById("lopDays2").value);
-  const bonus = parseInt(document.getElementById("bonusDays2").value);
+  const name = document.getElementById("empName").value;
+  const id = document.getElementById("empId").value;
+  const bank = document.getElementById("bankName").value;
+  const account = document.getElementById("accountNo").value;
+  const total = parseFloat(document.getElementById("pTotalSalary").value);
+  const lop = parseInt(document.getElementById("pLop").value);
+  const bonus = parseInt(document.getElementById("pBonus").value);
+  const month = document.getElementById("payslipMonth").value;
+  const year = document.getElementById("payslipYear").value;
 
-  if (!name || !id || !bank || !acc || isNaN(sal) || isNaN(lop) || isNaN(bonus) || sal <= 0 || lop < 0 || bonus < 0) {
-    document.getElementById("payslipResult").textContent = "Please fill all fields with valid values.";
+  if (!name || !id || !bank || !account || isNaN(total) || isNaN(lop) || isNaN(bonus) || !month || !year) {
+    alert("Please fill all fields correctly.");
     return;
   }
 
-  const { deduction, bonusAmt, final } = calculateFinalSalary(sal, lop, bonus);
+  const perDay = total / 30;
+  const deduction = lop * perDay;
+  const bonusAmount = bonus * perDay;
+  const final = total - deduction + bonusAmount;
 
-  /* template literal for the payslip content */
-  document.getElementById("payslipResult").innerHTML = `
-    <div class="payslip">
-      <div class="header"><strong>ABC Hospitals</strong><br>Payslip for the Month</div>
+  document.getElementById("outMonthYear").innerText = `Payslip for the month of ${month} ${year}`;
+  document.getElementById("outName").innerText = name;
+  document.getElementById("outId").innerText = id;
+  document.getElementById("outBank").innerText = bank;
+  document.getElementById("outAccount").innerText = account;
+  document.getElementById("outTotal").innerText = `₹${total.toFixed(2)}`;
+  document.getElementById("outLop").innerText = lop;
+  document.getElementById("outBonus").innerText = bonus;
+  document.getElementById("outDeduction").innerText = `-₹${deduction.toFixed(2)}`;
+  document.getElementById("outBonusAmt").innerText = `+₹${bonusAmount.toFixed(2)}`;
+  document.getElementById("outFinal").innerText = `₹${final.toFixed(2)}`;
 
-      <!-- Employee & Bank details -->
-      <table>
-        <tr><td>Employee Name</td><td>${name}</td><td>Employee ID</td><td>${id}</td></tr>
-        <tr><td>Bank Name</td><td>${bank}</td><td>Account No</td><td>${acc}</td></tr>
-      </table>
-
-      <!-- Salary breakdown -->
-      <table>
-        <thead>
-          <tr><th>Description</th><th>Days</th><th>Amount (₹)</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Total Salary</td><td>30</td><td>${sal.toFixed(2)}</td></tr>
-          <tr><td>Loss of Pay (LOP)</td><td>${lop}</td><td>- ${deduction.toFixed(2)}</td></tr>
-          <tr><td>Bonus</td><td>${bonus}</td><td>+ ${bonusAmt.toFixed(2)}</td></tr>
-          <tr><td colspan="2"><strong>Net Salary</strong></td><td><strong>${final.toFixed(2)}</strong></td></tr>
-        </tbody>
-      </table>
-
-      <!-- Signature section -->
-      <div class="footer">
-        <div><br><br><strong>HR Signature</strong></div>
-        <div><br><br><strong>Hospital Stamp</strong></div>
-      </div>
-
-      <div style="text-align:right; margin-top:20px;">Date: ${new Date().toLocaleDateString()}</div>
-    </div>
-  `;
+  document.getElementById("payslipContainer").style.display = "block";
 }

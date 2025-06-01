@@ -3,72 +3,114 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Salary & Payslip Generator</title>
-
-  <!-- external stylesheet -->
+  <title>Payslip Generator</title>
   <link rel="stylesheet" href="styles.css" />
-
-  <!-- external script (defer = run after HTML parsed) -->
-  <script src="app.js" defer></script>
 </head>
 <body>
   <div class="container">
-    <h2>ABC Hospitals</h2>
-
-    <!-- ─── Tabs ────────────────────────────────────────────── -->
-    <div class="tabs">
-      <button id="salaryTabBtn" class="active" onclick="toggleTab('salaryTab')">
-        Final Salary
-      </button>
-      <button id="payslipTabBtn" onclick="toggleTab('payslipTab')">
-        Generate Payslip
-      </button>
+    <h1>Automate Salary</h1>
+    <div class="tab-buttons">
+      <button onclick="showTab('salary')">Final Salary</button>
+      <button onclick="showTab('payslip')">Generate Payslip</button>
     </div>
 
-    <!-- ─── Final‑Salary Calculator ─────────────────────────── -->
-    <section id="salaryTab" class="tab-content active">
-      <label>Total Salary</label>
-      <input type="number" id="totalSalary" placeholder="e.g., 30000" />
+    <div id="salary" class="tab-content">
+      <h2>Salary Calculator</h2>
+      <label>Total Salary</label>
+      <input type="number" id="totalSalary" placeholder="e.g., 30000" />
+      <label>LOP Days</label>
+      <input type="number" id="lopDays" placeholder="e.g., 2" />
+      <label>Bonus Days</label>
+      <input type="number" id="bonusDays" placeholder="e.g., 3" />
+      <button onclick="calculateSalary()">Calculate</button>
+      <div class="result" id="salaryResult"></div>
+    </div>
 
-      <label>LOP Days</label>
-      <input type="number" id="lopDays" placeholder="e.g., 2" />
-
-      <label>Bonus Days</label>
-      <input type="number" id="bonusDays" placeholder="e.g., 3" />
-
-      <button onclick="calculateSalary()">Calculate Salary</button>
-
-      <div id="result" class="result"></div>
-    </section>
-
-    <!-- ─── Payslip Generator ───────────────────────────────── -->
-    <section id="payslipTab" class="tab-content">
-      <label>Employee Name</label>
+    <!-- <div id="payslip" class="tab-content" style="display:none;">
+      <h2>Payslip Generator</h2>
+      <label>Employee Name</label>
       <input type="text" id="empName" />
-
-      <label>Employee ID</label>
+      <label>Employee ID</label>
       <input type="text" id="empId" />
-
-      <label>Bank Name</label>
+      <label>Bank Name</label>
       <input type="text" id="bankName" />
+      <label>Account Number</label>
+      <input type="text" id="accountNo" />
+      <label>Total Salary</label>
+      <input type="number" id="pTotalSalary" />
+      <label>LOP Days</label>
+      <input type="number" id="pLop" />
+      <label>Bonus Days</label>
+      <input type="number" id="pBonus" />
+      <button onclick="generatePayslip()">Generate Payslip</button>
+    </div> -->
 
-      <label>Account No</label>
-      <input type="text" id="accNo" />
+    <div id="payslip" class="tab-content" style="display:none;">
+      <h2>Payslip Generator</h2>
 
-      <label>Total Salary</label>
-      <input type="number" id="totalSalary2" placeholder="e.g., 30000" />
+      <label>Employee Name</label>
+      <input type="text" id="empName" />
+      <label>Employee ID</label>
+      <input type="text" id="empId" />
+      <label>Bank Name</label>
+      <input type="text" id="bankName" />
+      <label>Account Number</label>
+      <input type="text" id="accountNo" />
 
-      <label>LOP Days</label>
-      <input type="number" id="lopDays2" placeholder="e.g., 2" />
+      <label>Month</label>
+      <select id="payslipMonth">
+        <option value="">Select Month</option>
+        <option value="January">January</option>
+        <option value="February">February</option>
+        <option value="March">March</option>
+        <option value="April">April</option>
+        <option value="May">May</option>
+        <option value="June">June</option>
+        <option value="July">July</option>
+        <option value="August">August</option>
+        <option value="September">September</option>
+        <option value="October">October</option>
+        <option value="November">November</option>
+        <option value="December">December</option>
+      </select>
+      <label>Year</label>
+      <input type="text" id="payslipYear" />
+      
+      <label>Total Salary</label>
+      <input type="number" id="pTotalSalary" />
+      <label>LOP Days</label>
+      <input type="number" id="pLop" />
+      <label>Bonus Days</label>
+      <input type="number" id="pBonus" />
+      <button onclick="generatePayslip()">Generate Payslip</button>
+    </div>
 
-      <label>Bonus Days</label>
-      <input type="number" id="bonusDays2" placeholder="e.g., 3" />
-
-      <button onclick="generatePayslip()">Generate Payslip</button>
-      <button onclick="window.print()">Print Payslip</button>
-
-      <div id="payslipResult" class="result"></div>
-    </section>
   </div>
+
+  <div id="payslipContainer" class="payslip-container" style="display:none;">
+    <div class="payslip">
+      <img src="header.jpg" class="header-img" />
+      <img src="logo.jpg" class="logo-bg" />
+      <table class="payslip-table">
+        <tr><th colspan="2" id="outMonthYear">Payslip for the month of [Month Year]</th></tr>
+        <tr><td>Employee Name</td><td id="outName"></td></tr>
+        <tr><td>Employee ID</td><td id="outId"></td></tr>
+        <tr><td>Bank Name</td><td id="outBank"></td></tr>
+        <tr><td>Account No</td><td id="outAccount"></td></tr>
+        <tr><td>Total Salary</td><td id="outTotal"></td></tr>
+        <tr><td>LOP Days</td><td id="outLop"></td></tr>
+        <tr><td>Bonus Days</td><td id="outBonus"></td></tr>
+        <tr><td>Deduction</td><td id="outDeduction"></td></tr>
+        <tr><td>Bonus</td><td id="outBonusAmt"></td></tr>
+        <tr><th>Final Salary</th><th id="outFinal"></th></tr>
+      </table>
+      <div class="signature"> 
+        <div>Signature</div>
+      </div>
+      <img src="footer.jpg" class="footer-img" />
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>

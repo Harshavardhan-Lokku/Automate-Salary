@@ -1,91 +1,151 @@
-/* ─── Base & Layout ───────────────────────────────────────── */
-* { box-sizing: border-box; }
-
 body {
-  margin: 0;
-  padding: 2rem;
-  background: #f0f4f8;
   font-family: Arial, sans-serif;
+  background-color: #f0f4f8;
+  padding: 2rem;
 }
 
 .container {
-  max-width: 900px;
+  background: #fff;
+  max-width: 600px;
   margin: auto;
   padding: 2rem;
-  background: #fff;
   border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  text-align: center;
 }
 
-/* ─── Tabs ────────────────────────────────────────────────── */
-.tabs {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 2rem;
+label {
+  display: block;
+  margin-top: 1rem;
+  text-align: left;
 }
 
-.tabs button {
-  padding: 0.5rem 1.2rem;
-  background: #e1e5ea;
+input {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  margin-top: 1.5rem;
+  width: 100%;
+  padding: 0.7rem;
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-weight: 600;
 }
 
-.tabs button.active { background: #007bff; color: #fff; }
+button:hover {
+  background-color: #0056b3;
+}
 
-/* ─── Forms ───────────────────────────────────────────────── */
-label    { display: block; margin-top: 1rem; }
-input    { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px; }
-button   { margin-top: 1.5rem; width: 100%; padding: 0.8rem; font-size: 1rem;
-           border: none; border-radius: 5px; background: #007bff; color: #fff; cursor: pointer; }
-button:hover { background: #0056b3; }
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
 
-.result  { margin-top: 2rem; }
+.tab-buttons button {
+  width: auto;
+  padding: 0.5rem 1rem;
+}
 
-/* ─── Tab visibility ─────────────────────────────────────── */
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-
-/* ─── Payslip (A4‑style) ─────────────────────────────────── */
-.payslip {
-  padding: 40px;
-  font-size: 16px;
-  background: #fff;
+.payslip-container {
+  max-width: 794px;
+  height: 1123px;
+  margin: 2rem auto;
+  background: white;
   border: 2px solid #000;
+  position: relative;
+  padding: 2rem;
+  box-sizing: border-box;
 }
 
-.payslip .header {
-  text-align: center;
-  font-size: 1.6rem;
-  margin-bottom: 20px;
+.payslip {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
-.payslip table {
+.header-img, .footer-img {
+  width: 100%;
+}
+
+.footer-img{
+    position: absolute;
+    bottom: 0px;
+}
+
+.logo-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  opacity: 0.1;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+select {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+  appearance: none; /* Remove default OS styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+.payslip-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
+  margin-top: 3rem;
+  z-index: 1;
+  position: relative;
 }
 
-.payslip th, .payslip td {
-  padding: 10px;
+.payslip-table th, .payslip-table td {
   border: 1px solid #ccc;
+  padding: 0.9rem;
 }
 
-.payslip th                { background: #f8f8f8; border: 1px solid #000; }
-.payslip td:first-child    { font-weight: bold; }
+.payslip-table th {
+  background-color: #f0f0f0;
+  border: 2px solid #000;
+  text-align: center;
+}
 
-.payslip .footer {
-  margin-top: 40px;
+.payslip-table td {
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.signature {
   display: flex;
-  justify-content: space-between;
-  font-size: 14px;
+  justify-content:end ;
+  margin-top: 13rem;
+  padding: 0 2rem;
 }
 
-/* ─── Print rules ────────────────────────────────────────── */
-@media print {
-  body *:not(.payslip):not(.payslip *) { display: none; }
-  .payslip { page-break-after: avoid; }
+.result {
+  margin-top: 2rem;
+  background: #eefaf0;
+  padding: 1rem;
+  border: 1px solid #c6e7cd;
+  border-radius: 8px;
+  text-align: left;
 }
