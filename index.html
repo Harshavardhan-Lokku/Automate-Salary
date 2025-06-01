@@ -2,112 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Salary Calculator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f4f8;
-      padding: 2rem;
-    }
-    .container {
-      background: #fff;
-      max-width: 450px;
-      margin: auto;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      text-align: center;
-      color: #333;
-      font-size: larger;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-    label {
-      display: block;
-      margin: 1rem 0 0.3rem;
-    }
-    input {
-      width: 100%;
-      padding: 0.5rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    button {
-      margin-top: 1.5rem;
-      width: 100%;
-      padding: 0.7rem;
-      background-color: #007bff;
-      color: white;
-      font-size: 1rem;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .result {
-      margin-top: 2rem;
-      padding: 1rem;
-      background-color: #eefaf0;
-      border: 1px solid #c6e7cd;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    .result span {
-      display: block;
-      margin: 0.4rem 0;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salary & Payslip Generator</title>
+
+  <!-- external stylesheet -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- external script (defer = run after HTML parsed) -->
+  <script src="app.js" defer></script>
 </head>
 <body>
-  <div class="container">ABC Hospitals</div>
-    <h2>Salary Calculator</h2>
+  <div class="container">
+    <h2>ABC Hospitals</h2>
 
-    <label for="totalSalary">Total Salary</label>
-    <input type="number" id="totalSalary" placeholder="e.g., 30000" />
+    <!-- ─── Tabs ────────────────────────────────────────────── -->
+    <div class="tabs">
+      <button id="salaryTabBtn" class="active" onclick="toggleTab('salaryTab')">
+        Final Salary
+      </button>
+      <button id="payslipTabBtn" onclick="toggleTab('payslipTab')">
+        Generate Payslip
+      </button>
+    </div>
 
-    <label for="lopDays">LOP Days</label>
-    <input type="number" id="lopDays" placeholder="e.g., 2" />
+    <!-- ─── Final‑Salary Calculator ─────────────────────────── -->
+    <section id="salaryTab" class="tab-content active">
+      <label>Total Salary</label>
+      <input type="number" id="totalSalary" placeholder="e.g., 30000" />
 
-    <label for="bonusDays">Bonus Days</label>
-    <input type="number" id="bonusDays" placeholder="e.g., 3" />
+      <label>LOP Days</label>
+      <input type="number" id="lopDays" placeholder="e.g., 2" />
 
-    <button onclick="calculateSalary()">Calculate Salary</button>
+      <label>Bonus Days</label>
+      <input type="number" id="bonusDays" placeholder="e.g., 3" />
 
-    <div class="result" id="result"></div>
+      <button onclick="calculateSalary()">Calculate Salary</button>
+
+      <div id="result" class="result"></div>
+    </section>
+
+    <!-- ─── Payslip Generator ───────────────────────────────── -->
+    <section id="payslipTab" class="tab-content">
+      <label>Employee Name</label>
+      <input type="text" id="empName" />
+
+      <label>Employee ID</label>
+      <input type="text" id="empId" />
+
+      <label>Bank Name</label>
+      <input type="text" id="bankName" />
+
+      <label>Account No</label>
+      <input type="text" id="accNo" />
+
+      <label>Total Salary</label>
+      <input type="number" id="totalSalary2" placeholder="e.g., 30000" />
+
+      <label>LOP Days</label>
+      <input type="number" id="lopDays2" placeholder="e.g., 2" />
+
+      <label>Bonus Days</label>
+      <input type="number" id="bonusDays2" placeholder="e.g., 3" />
+
+      <button onclick="generatePayslip()">Generate Payslip</button>
+      <button onclick="window.print()">Print Payslip</button>
+
+      <div id="payslipResult" class="result"></div>
+    </section>
   </div>
-
-  <script>
-    function calculateSalary() {
-      const totalSalary = parseFloat(document.getElementById("totalSalary").value);
-      const lop = parseInt(document.getElementById("lopDays").value);
-      const bonus = parseInt(document.getElementById("bonusDays").value);
-
-      if (isNaN(totalSalary) || isNaN(lop) || isNaN(bonus) || lop < 0 || bonus < 0) {
-        document.getElementById("result").innerText = "Please enter valid positive numbers.";
-        return;
-      }
-
-      const perDaySalary = totalSalary / 30;
-      const deduction = lop * perDaySalary;
-      const bonusAmount = bonus * perDaySalary;
-      const finalSalary = totalSalary - deduction + bonusAmount;
-
-      document.getElementById("result").innerHTML = `
-        <span><strong>Total Salary (30-day):</strong> ₹${totalSalary.toFixed(2)}</span>
-        <span><strong>LOP Days (missed):</strong> ${lop} day(s)</span>
-        <span><strong>Bonus Days (extra):</strong> ${bonus} day(s)</span>
-        <span><strong>Deduction:</strong> -₹${deduction.toFixed(2)}</span>
-        <span><strong>Bonus:</strong> +₹${bonusAmount.toFixed(2)}</span>
-        <hr>
-        <span><strong>Final Salary:</strong> ₹${finalSalary.toFixed(2)}</span>
-      `;
-    }
-  </script>
 </body>
 </html>

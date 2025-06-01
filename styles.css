@@ -1,0 +1,91 @@
+/* ─── Base & Layout ───────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 2rem;
+  background: #f0f4f8;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ─── Tabs ────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.tabs button {
+  padding: 0.5rem 1.2rem;
+  background: #e1e5ea;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tabs button.active { background: #007bff; color: #fff; }
+
+/* ─── Forms ───────────────────────────────────────────────── */
+label    { display: block; margin-top: 1rem; }
+input    { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px; }
+button   { margin-top: 1.5rem; width: 100%; padding: 0.8rem; font-size: 1rem;
+           border: none; border-radius: 5px; background: #007bff; color: #fff; cursor: pointer; }
+button:hover { background: #0056b3; }
+
+.result  { margin-top: 2rem; }
+
+/* ─── Tab visibility ─────────────────────────────────────── */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ─── Payslip (A4‑style) ─────────────────────────────────── */
+.payslip {
+  padding: 40px;
+  font-size: 16px;
+  background: #fff;
+  border: 2px solid #000;
+}
+
+.payslip .header {
+  text-align: center;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+}
+
+.payslip table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.payslip th, .payslip td {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.payslip th                { background: #f8f8f8; border: 1px solid #000; }
+.payslip td:first-child    { font-weight: bold; }
+
+.payslip .footer {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+/* ─── Print rules ────────────────────────────────────────── */
+@media print {
+  body *:not(.payslip):not(.payslip *) { display: none; }
+  .payslip { page-break-after: avoid; }
+}
